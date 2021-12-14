@@ -1,5 +1,6 @@
 package com.fatah.fashioncommerce
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,35 +10,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.fatah.fashioncommerce.ui.theme.ButtonBrown
 import com.fatah.fashioncommerce.ui.theme.GreyHighlightColor
 
 @Composable
 fun OnboardingPage(
-    arrivals: Int
+    arrivals: Int,
+    navController: NavController
 ) {
+    Image(
+        painter = painterResource(id = R.drawable.woman_fashion),
+        contentScale = ContentScale.Crop,
+        contentDescription = "background",
+        modifier = Modifier.fillMaxSize()
+    )
    Box(
        modifier = Modifier
            .fillMaxSize()
-           .paint(
-               painter = painterResource(id = R.drawable.woman_fashion),
-               contentScale = ContentScale.Crop
-           )
            .padding(32.dp)
    ) {
-        NewArrivals(arrivals = arrivals)
-       BottomSection()
+       NewArrivals(arrivals = arrivals)
+       BottomSection(navController)
    }
 }
 
@@ -58,7 +57,9 @@ fun NewArrivals(
 }
 
 @Composable
-fun BottomSection() {
+fun BottomSection(
+    navController: NavController
+) {
     Box(
         contentAlignment = Alignment.CenterStart,
         modifier = Modifier
@@ -91,7 +92,7 @@ fun BottomSection() {
                 color = Color.White,
                 style = MaterialTheme.typography.h1
             )
-            
+
             Spacer(modifier = Modifier.padding(16.dp))
 
             Row (
@@ -105,9 +106,11 @@ fun BottomSection() {
                     color = Color.White,
                     modifier = Modifier.clickable {  }
                 )
-                
+
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                       navController.navigate(Screen.ProductListPage.route)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.White, backgroundColor = ButtonBrown
                     ),
