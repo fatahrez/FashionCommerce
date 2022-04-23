@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
@@ -20,11 +21,13 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.fatah.fashioncommerce.models.BottomContentMenu
 import com.fatah.fashioncommerce.models.Collection
 import com.fatah.fashioncommerce.models.Outfit
 import com.fatah.fashioncommerce.ui.theme.ButtonBrown
@@ -72,7 +75,7 @@ fun ProductListPage(
                         listOf(
                             Collection(
                                 "SPRING",
-                                "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2456&q=80",
+                                "https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80",
                                 GreyHighlightColor
                             ),
                             Collection(
@@ -89,6 +92,19 @@ fun ProductListPage(
                     )
                 }
             }
+        }
+        Box(modifier = Modifier
+            .align(Alignment.BottomCenter)
+        ) {
+            BottomMenu(
+                items = listOf(
+                    BottomContentMenu("Home", R.drawable.menu, true),
+                    BottomContentMenu("Cart", R.drawable.shopping_bag, false),
+                    BottomContentMenu("Likes", R.drawable.heart, false),
+                    BottomContentMenu("Cart", R.drawable.profile, false)
+                ),
+                navController = navController
+            )
         }
     }
 }
@@ -168,7 +184,7 @@ fun NewArrivalOutfitsArea(
     val screenHeight = configuration.screenHeightDp.dp
 
     val cardWidth = screenWidth/2f
-    val cardHeight = screenHeight/ 2.5f
+    val cardHeight = screenHeight/ 2.25f
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -312,19 +328,39 @@ fun CollectionCardArea(
         shape = RoundedCornerShape(6),
         elevation = 4.dp,
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize(),
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Image(
-                painter = rememberImagePainter(
-                    data = collection.image
-                ),
-                contentDescription = collection.name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-            )
+            Box(modifier = Modifier
+                .fillMaxSize(),
+            ) {
+                Image(
+                    painter = rememberImagePainter(
+                        data = collection.image
+                    ),
+                    contentDescription = collection.name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+            }
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .blur(0.7.dp),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Text(text = collection.name,
+                    color = Color.White,
+                    style = TextStyle(
+                        fontFamily = readexProFonts,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 16.sp
+                    )
+                )
+            }
         }
-        Text(text = collection.name, color = Color.White)
+
     }
 }
