@@ -223,7 +223,7 @@ fun NewArrivalOutfitsArea(
         modifier = Modifier
             .fillMaxWidth()
             .height(cardHeight),
-    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+        contentPadding = PaddingValues(8.dp)
     ) {
         items(outfits.size) {
             OutfitCard(
@@ -247,7 +247,7 @@ fun OutfitCard(
     Card(
         modifier = Modifier
             .width(cardWidth * 1.2f)
-            .padding(start = 2.dp, end = 30.dp)
+            .padding(start = 0.dp, end = 20.dp)
             .clickable { },
         onClick = {
             navigator.navigate(
@@ -390,6 +390,7 @@ fun CollectionCardArea(
                         .fillMaxSize()
                 )
             }
+            // Note: blur is available in only android 12
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
