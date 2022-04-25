@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/compose-model-1650863048053.xml" value="0.5" />
         <entry key="app/src/main/res/drawable-v24/outline_arrow_right_alt_24.xml" value="0.19074074074074074" />
+        <entry key="app/src/main/res/drawable/west-48px.xml" value="0.152" />
       </map>
     </option>
   </component>

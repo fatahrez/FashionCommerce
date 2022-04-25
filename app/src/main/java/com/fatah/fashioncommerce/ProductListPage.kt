@@ -14,30 +14,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.fatah.fashioncommerce.models.BottomContentMenu
+import com.fatah.fashioncommerce.destinations.ProductDetailPageDestination
+import com.fatah.fashioncommerce.models.*
 import com.fatah.fashioncommerce.models.Collection
-import com.fatah.fashioncommerce.models.Outfit
 import com.fatah.fashioncommerce.ui.theme.ButtonBrown
 import com.fatah.fashioncommerce.ui.theme.GreyHighlightColor
 import com.fatah.fashioncommerce.ui.theme.SmokeWhiteBackground
 import com.fatah.fashioncommerce.ui.theme.readexProFonts
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination
 @Composable
 fun ProductListPage(
-    navController: NavController
+    navigator: DestinationsNavigator
 ) {
     Box(
         modifier = Modifier
@@ -58,17 +58,45 @@ fun ProductListPage(
                         listOf(
                             Outfit(
                                 "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/441600/item/goods_30_441600.jpg",
-                                Color(0xFFFFFFFF),
+//                                Color(0xFFFFFFFF),
                                 "Short-Sleeve T-Shirt",
-                                "$60.99"
+                                "$60.99",
+                                "Tshirt",
+                                listOf(
+                                    ItemSize("S", false),
+                                    ItemSize("M", false),
+                                    ItemSize("L", true),
+                                    ItemSize("XL", false)
+                                ),
+                                listOf(
+                                    ItemColor("#CC6633"),
+                                    ItemColor("#999999"),
+                                    ItemColor("#CCCC99"),
+                                    ItemColor("#F4E6DE", active = true),
+                                    ItemColor("#FF6666")
+                                )
                             ),
                             Outfit(
                                 "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/447656/sub/goods_447656_sub13.jpg",
-                                Color(0xFFFFFFFF),
+//                                Color(0xFFFFFFFF),
                                 "Skinny-Fit Jeans (Tall)",
-                                "$49.90"
+                                "$49.90",
+                                "Trouser",
+                                listOf(
+                                    ItemSize("S", false),
+                                    ItemSize("M", false),
+                                    ItemSize("L", true),
+                                    ItemSize("XL", false)
+                                ),
+                                listOf(
+                                    ItemColor("#CC6633"),
+                                    ItemColor("#999999"),
+                                    ItemColor("#CCCC99", active = true),
+                                    ItemColor("#FF6666")
+                                )
                             )
-                        )
+                        ),
+                        navigator = navigator
                     )
                     CollectionArea()
                     CollectionsListArea(
@@ -87,6 +115,11 @@ fun ProductListPage(
                                 "SUMMER",
                                 "https://images.unsplash.com/photo-1542213493895-edf5b94f5a96?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2146&q=80",
                                 GreyHighlightColor
+                            ),
+                            Collection(
+                                "AUTUMN",
+                                "https://images.unsplash.com/photo-1459478309853-2c33a60058e7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+                                GreyHighlightColor
                             )
                         )
                     )
@@ -103,7 +136,7 @@ fun ProductListPage(
                     BottomContentMenu("Likes", R.drawable.heart, false),
                     BottomContentMenu("Cart", R.drawable.profile, false)
                 ),
-                navController = navController
+                navigator = navigator
             )
         }
     }
@@ -177,7 +210,8 @@ fun NewArrivalArea() {
 
 @Composable
 fun NewArrivalOutfitsArea(
-    outfits: List<Outfit>
+    outfits: List<Outfit>,
+    navigator: DestinationsNavigator
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -188,29 +222,40 @@ fun NewArrivalOutfitsArea(
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .height(cardHeight)
+            .height(cardHeight),
+    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
     ) {
         items(outfits.size) {
             OutfitCard(
                 outfit = outfits[it],
                 cardWidth = cardWidth,
-                cardHeight = cardHeight
+                cardHeight = cardHeight,
+                navigator = navigator
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OutfitCard(
     outfit: Outfit,
     cardWidth: Dp,
-    cardHeight: Dp
+    cardHeight: Dp,
+    navigator: DestinationsNavigator
 ) {
     Card(
         modifier = Modifier
             .width(cardWidth * 1.2f)
-            .padding(start = 2.dp, end = 30.dp, bottom = 0.dp, top = 8.dp)
+            .padding(start = 2.dp, end = 30.dp)
             .clickable { },
+        onClick = {
+            navigator.navigate(
+                ProductDetailPageDestination(
+                    outfit
+                )
+            )
+        },
         shape = RoundedCornerShape(6),
         elevation = 4.dp
     ) {
@@ -304,12 +349,13 @@ fun CollectionsListArea(
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .height(cardHeight)
+            .height(cardHeight),
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
     ) {
         items(collections.size){
             CollectionCardArea(
                 collection = collections[it],
-                screenWidth/3
+                screenWidth/2.5f
             )
         }
     }
@@ -323,7 +369,7 @@ fun CollectionCardArea(
     Card(
         modifier = Modifier
             .width(cardWidth)
-            .padding(start = 2.dp, end = 25.dp, bottom = 5.dp, top = 0.dp)
+            .padding(start = 0.dp, end = 25.dp)
             .clickable { },
         shape = RoundedCornerShape(6),
         elevation = 4.dp,

@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,9 +16,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.fatah.fashioncommerce.models.BottomContentMenu
 import com.fatah.fashioncommerce.ui.theme.ButtonBrown
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.util.*
 
 @Composable
@@ -30,7 +29,7 @@ fun BottomMenu(
     activeTextColor: Color = Color.White,
     inactiveTextColor: Color = Color.LightGray,
     initialSelectedItemIndex: Int = 0,
-    navController: NavController
+    navigator: DestinationsNavigator
 ) {
     var selectedItemIndex by remember {
         mutableStateOf(initialSelectedItemIndex)
@@ -49,7 +48,7 @@ fun BottomMenu(
                 activeHighlightColor = activeHighlightColor,
                 activeTextColor = activeTextColor,
                 inactiveTextColor = inactiveTextColor,
-                navController = navController,
+                navigator = navigator,
                 navigateTo = item.title.lowercase(Locale.getDefault()) + "_screen"
             ) {
                 selectedItemIndex = index
@@ -64,7 +63,7 @@ fun BottomMenuItem(
     activeHighlightColor: Color = Color.Black,
     activeTextColor: Color = Color.White,
     inactiveTextColor: Color = Color.LightGray,
-    navController: NavController,
+    navigator: DestinationsNavigator,
     navigateTo: String,
     onItemClick:() ->Unit
 ) {

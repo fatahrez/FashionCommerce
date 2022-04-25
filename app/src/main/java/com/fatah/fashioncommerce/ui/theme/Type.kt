@@ -36,6 +36,13 @@ val Typography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 50.sp,
         textDecoration = TextDecoration.LineThrough
+    ),
+
+    subtitle2 = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        letterSpacing = 0.1.sp,
+        color = GreyText
     )
 
 
